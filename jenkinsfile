@@ -1,11 +1,12 @@
 node {
-    stage('clone') {
-    git 'https://github.com/IkbelTalebHssan/jenkins-helloworld-.git'
+    stage('Clone') {
+    checkout scm
     }
-    stage('build') {
-    sh label: '', script: 'javac Main.java'
+    stage('Build image') {
+    app = docker.build("ikbel/nginx")
     }
-    stage('run') {
-    sh label: '', script: 'java Main'
+    stage('Test image') {
+    docker.image('ikbel/nginx').withRun('-p 80:80') { c -> sh 'docker ps'
+                                                           sh 'curl localhost'}
     }
 }
